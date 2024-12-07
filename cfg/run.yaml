@@ -1,0 +1,37 @@
+random_seed: 42
+device: 0
+run_mode: train # [train, test]
+
+train:
+  model_name: A2C_ICM # [A2C, A2C_DP, A2C_ICM, A2C_NOISE, A2C_RE3]
+  save_frequency: 500 # save pth files
+  # Basic
+  save_dir: exp
+  stack_size: 5
+  steps_per_update: 5
+  num_of_steps: 250000 # 250000
+  num_of_processes: 8 # maxmum cpus
+  lr: 0.0001
+  clip_grad:  1.0 # [False or float]
+  reward_discount: 0.99
+  value_loss_coef: 0.5
+  entropy_coef: 0.1
+  step_size: 1000
+  gamma: 1 # per step_size lr = lr*gamma
+
+  # A2C_DP
+  drop_rate: 0.1
+  # A2C_ICM
+
+  # A2C_RE3
+  k_neighbors: 3
+  buffer_size: 500
+  latent_dim: 128
+  # A2C_NOISE
+  sigma_init: 0.017
+
+test:
+  model_name: A2C
+  pth_path: /home/jiabaowang/Documents/Lectures/DRL/Final/exp/A2C_241205_170327/A2C_20000.pt
+  
+
