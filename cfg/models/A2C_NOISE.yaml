@@ -1,0 +1,4 @@
+reward_discount: 0.99
+value_loss_coef: 0.5
+entropy_coef: 0.1
+sigma_init: 0.017

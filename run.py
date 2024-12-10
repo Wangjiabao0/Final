@@ -6,7 +6,7 @@ from munch import Munch, DefaultMunch
 import numpy as np
 from shutil import copyfile
 
-from model import Trainer
+from model import Trainer, test
 from utils.utils import init_seeds, get_logger, select_device, make_save_dir
 
 if __name__ == '__main__':
@@ -36,6 +36,7 @@ if __name__ == '__main__':
         trainer.run()
 
     elif config.run_mode == 'test':
-        test_config = config.test
-        score = eval(test_config)
+        config_test = config.train
+        config_test.update(config.test)
+        score = test(config_test)
         print('Total score: {0:.2f}'.format(score))

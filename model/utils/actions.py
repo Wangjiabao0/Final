@@ -1,3 +1,4 @@
+import torch
 import numpy as np
 
 
@@ -13,21 +14,18 @@ def get_action_space():
     return len(ACTIONS)
 
 
-# def get_actions(probs):
-#     values, indices = probs.max(1)
-#     actions = np.zeros((probs.size(0), 3))
-#     for i in range(probs.size(0)):
-#         action = ACTIONS[indices[i]]
-#         actions[i] = float(values[i]) * np.array(action)
-#     return actions
-
 def get_actions(probs):
-    direction = probs[:,:2]
-    gas_brake = probs[:,2:]
-    values_1, indices_1 = direction.max(1)
-    values_2, indices_2 = gas_brake.max(1)
+    values, indices = probs.max(1)
     actions = np.zeros((probs.size(0), 3))
     for i in range(probs.size(0)):
-        actions[i] = float(values_1[i]) * np.array(ACTIONS[indices_1[i]]) + \
-                     float(values_2[i]) * np.array(ACTIONS[indices_2[i]+2])
+        action = ACTIONS[indices[i]]
+        actions[i] = float(values[i]) * np.array(action)
     return actions
+
+
+def compute_action_logs_and_entropies(probs, log_probs):
+    values, indices = probs.max(1)
+    indices = indices.view(-1, 1)
+    action_log_probs = log_probs.gather(1, indices)
+    entropies = -(log_probs * probs).sum(-1)
+    return action_log_probs, entropies

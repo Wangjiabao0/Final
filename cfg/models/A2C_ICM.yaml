@@ -1,0 +1,9 @@
+reward_discount: 0.99
+value_loss_coef: 0.5
+entropy_coef: 0.1
+
+beta: 1.0
+kappa: 0.0
+icm_lr: 0.0001
+icm_batch_size: 5
+

@@ -48,8 +48,8 @@ def make_save_dir(config):
     os.makedirs(save_dir)
     config.save_dir = save_dir
     # Configuration file save
-    config_file = os.path.basename(config.run_yaml)
-    copyfile(config.run_yaml, os.path.join(save_dir, config_file))
+    config_file = os.path.basename(config.config)
+    copyfile(config.config, os.path.join(save_dir, config_file))
     
     return config
 

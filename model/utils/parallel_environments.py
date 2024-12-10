@@ -63,7 +63,7 @@ class ParallelEnvironments:
         for parent in self.parents:
             parent.send(('reset', None))
         results = [parent.recv() for parent in self.parents]
-        return torch.tensor(results,dtype=torch.float32)
+        return torch.tensor(np.array(results), dtype=torch.float32)
 
     def get_state_shape(self):
         return (self.stack_size, 84, 84)
