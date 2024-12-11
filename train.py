@@ -28,7 +28,6 @@ def get_trainer(config):
         trainer = actor_critic_re3.A2CRE3Trainer(model_config)    
     return trainer
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='[DRL] Train the car racing model')
     parser.add_argument('--config', default=None, help='path to yaml config file', type=str)
