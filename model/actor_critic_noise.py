@@ -129,6 +129,7 @@ class A2CNoiseTrainer:
                 _, _, last_values = self.model(self.current_observations)
                 expected_rewards = self.storage.compute_expected_rewards(last_values, self.config.reward_discount)
                 advantages = expected_rewards - self.storage.values # A = R-V
+                self.writer.add_scalar('rewards', expected_rewards.mean(), update)
 
                 # Compute losses
                 value_loss = advantages.pow(2).mean()

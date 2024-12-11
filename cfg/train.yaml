@@ -5,7 +5,7 @@ stack_size: 5 # channel image size to CNN is (stack_size, 84, 84)
 save_dir: exp
 save_frequency: 5000 # save pt files
 steps_per_update: 5 # Max number of forward steps for A3C before update
-num_of_steps: 125000 # Number of training steps
+num_of_steps: 500000 # Number of training steps
 num_of_processes: 8 # processes
 
 clip_grad:  0.5 # [False or float]

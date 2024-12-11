@@ -154,9 +154,11 @@ class A2CRE3Trainer:
                 # Compute R and V
                 _, _, last_values = self.model(self.current_observations)
                 expected_rewards = self.storage.compute_expected_rewards(last_values, self.config.reward_discount)
-                advantages = intrinsic_rewards + expected_rewards - self.storage.values # A = R-V
+                rewards = expected_rewards + intrinsic_rewards
+                advantages = rewards - self.storage.values # A = R-V
                 self.writer.add_scalar('intrinsic_rewards', intrinsic_rewards.mean(), update)
                 self.writer.add_scalar('expected_rewards', expected_rewards.mean(), update)
+                self.writer.add_scalar('rewards', rewards.mean(), update)
 
                 # Compute losses
                 value_loss = advantages.pow(2).mean()
