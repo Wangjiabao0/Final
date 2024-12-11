@@ -1,5 +1,3 @@
-
-
 import os
 import pdb
 import os
@@ -14,10 +12,13 @@ import argparse
 import yaml
 from munch import Munch, DefaultMunch
 
+from model import actor_critic, actor_critic_icm, actor_critic_dp, actor_critic_noise, actor_critic_re3
 from utils.utils import init_seeds, get_logger, select_device, make_save_dir
+from model.utils import environment_wrapper, actions
 
-def get_trainer(config):
-    trainer = None
+
+def get_model(config):
+    model = None
     model_yaml_path = f'cfg/models/{config.model_name}.yaml'
     with open(model_yaml_path, 'r') as f:
         params = yaml.load(f, Loader=yaml.FullLoader)
@@ -25,16 +26,16 @@ def get_trainer(config):
     model_config = DefaultMunch.fromDict(model_config.toDict())
     model_config.update(config)
     if config.model_name == 'A2C':
-        trainer = actor_critic.A2CTrainer(model_config)
+        model = actor_critic.ActorCritic(model_config, actions.get_action_space())
     elif config.model_name == 'A2C_DP':
-        trainer = actor_critic_dp.A2CDPTrainer(model_config)
+        model = actor_critic_dp.ActorCriticDP(model_config, actions.get_action_space())
     elif config.model_name == 'A2C_ICM':
-        trainer = actor_critic_icm.A2CTrainer(model_config)
+        model = actor_critic_icm.ActorCritic(model_config, actions.get_action_space())
     elif config.model_name == 'A2C_NOISE':
-        trainer = actor_critic_noise.ActorCriticNoise(model_config)
+        model = actor_critic_noise.ActorCriticNoise(model_config, actions.get_action_space())
     elif config.model_name == 'A2C_RE3':
-        trainer = actor_critic_re3.A2CTrainer(model_config)    
-    return trainer
+        model = actor_critic_re3.ActorCritic(model_config, actions.get_action_space())    
+    return model
 
 
 if __name__ == '__main__':
@@ -52,7 +53,7 @@ if __name__ == '__main__':
     config.device = select_device(config.device)
 
     env = gym.make('CarRacing-v2',render_mode='human')
-    env_wrapper = EnvironmentWrapper(env, config.stack_size)
+    env_wrapper = environment_wrapper.EnvironmentWrapper(env, config.stack_size)
 
     model = get_model(config)
     pt = torch.load(config.pt_path)
@@ -64,8 +65,8 @@ if __name__ == '__main__':
     done = False
     total_score = 0
     while not done:
-        probs, _, _, _ = model(state)
-        action = get_actions(probs)
+        probs, _, _, = model(state)
+        action = actions.get_actions(probs)
         state, reward, done = env_wrapper.step(action[0])
         state = torch.Tensor([state])
         total_score += reward

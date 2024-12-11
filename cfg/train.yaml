@@ -1,4 +1,4 @@
-model_name: A2C_NOISE # [A2C, A2C_DP, A2C_ICM, A2C_NOISE, A2C_RE3]
+model_name: A2C_ICM # [A2C, A2C_DP, A2C_ICM, A2C_NOISE, A2C_RE3]
 random_seed: 42
 device: 0 # GPU 0,1,..., or CPU
 stack_size: 5
