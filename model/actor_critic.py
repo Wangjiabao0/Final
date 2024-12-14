@@ -51,7 +51,7 @@ class A2CTrainer:
         self.storage = Storage(self.config.steps_per_update, self.num_of_processes)
         self.current_observations = torch.zeros(self.num_of_processes, 
                                                 *self.parallel_environments.get_state_shape())
-         
+
         self.writer = SummaryWriter(log_dir=self.config.save_dir)
         self.episode_rewards = [[] for _ in range(self.num_of_processes)]
 
@@ -114,7 +114,7 @@ class A2CTrainer:
                 self.writer.add_scalar('Grad/Total Norm', total_norm, update)
 
                 # Save model periodically
-                if update % self.config.save_frequency == 0 and update > 0:
+                if (update+1) % self.config.save_frequency == 0 and update > 1:
                     save_path = os.path.join(self.config.save_dir, f'{self.model_name}_{update}.pt')
                     torch.save(self.model.state_dict(), save_path)
 

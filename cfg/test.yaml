@@ -1,6 +1,11 @@
 
-random_seed: 42
+random_seed: 1 # keep it
 device: 0
-model_name: A2C_ICM # [A2C, A2C_DP, A2C_ICM, A2C_NOISE, A2C_RE3]
+model_name: A2C_DP # [A2C, A2C_DP, A2C_ICM, A2C_NOISE, A2C_RE3]
 stack_size: 5
-pt_path: /home/jiabaowang/Documents/Lectures/DRL/Final/exp/A2C_ICM_241211_105651/A2C_ICM_15000.pt
+pt_path: /home/jiabaowang/Documents/Lectures/DRL/Final/exp/A2C_DP_241212_211401/A2C_DP_50000.pt
+save_video: True # save video (True); visualization (False)
+
+
+# Note 
+# A2C_DP best is /home/jiabaowang/Documents/Lectures/DRL/Final/exp/A2C_DP_241212_211401/A2C_DP_50000.pt

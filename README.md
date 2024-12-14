@@ -13,13 +13,13 @@ Ensure you have the following libraries installed:
 - torchvision = 0.14.0+cu116
 - tensorboard = 2.14.0
 - tensorboard-data-server = 0.7.2
+- moviepy = 1.0.3
 
 
 Install the dependencies with:
 ```bash
 pip install -r requirements.txt
 ```
-
 
 # How to Run
 ## Training
@@ -32,6 +32,15 @@ Run the testing script using the following command:
 ```bash
 python test.py --config ./cfg/test.yaml
 ```
+One can choose if save video or not by setting geh yaml file. The save folder is {exp_path}/video
+
+## Draw figures
+eg. run the drawer script using the following command:
+```bash
+python utils/draw_reward.py --exp ./exp/A2C_241211_185757/
+```
+The result will save in folder ./exp/A2C_241211_185757/
+
 ## Configuration
 - The --config flag specifies the path to the configuration file.
 - Modify the YAML files in ./cfg/ to adjust hyperparameters or environment settings.

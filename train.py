@@ -13,6 +13,8 @@ def get_trainer(config):
     model_yaml_path = f'cfg/models/{config.model_name}.yaml'
     with open(model_yaml_path, 'r') as f:
         params = yaml.load(f, Loader=yaml.FullLoader)
+    model_config_file = os.path.basename(model_yaml_path)
+    copyfile(model_yaml_path, os.path.join(config.save_dir, model_config_file))
     model_config = Munch(params)
     model_config = DefaultMunch.fromDict(model_config.toDict())
     model_config.update(config)

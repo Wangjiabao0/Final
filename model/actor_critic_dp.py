@@ -34,17 +34,17 @@ class ActorCriticDP(nn.Module):
 
         flattened = torch.flatten(conv2_out, start_dim=1)  # N x 9*9*32
         linear1_out = self.linear1(flattened)
-        linear1_out = self.dropout(linear1_out)
-
-        policy_output = self.policy(linear1_out)
         value_output = self.value(linear1_out)
+
+        linear1_out = self.dropout(linear1_out)
+        policy_output = self.policy(linear1_out)
 
         probs = F.softmax(policy_output, dim=1)
         log_probs = F.log_softmax(policy_output, dim=1) # take ln
         return probs, log_probs, value_output
 
 
-class A2CDPTrainer:
+class     A2CDPTrainer:
     def __init__(self, config):
         self.model_name = config.model_name
         self.config = config
@@ -55,15 +55,17 @@ class A2CDPTrainer:
         self.model = ActorCriticDP(config, get_action_space())
         self.optimizer = Adam(self.model.parameters(), lr=self.config.lr)
         self.storage = Storage(self.config.steps_per_update, self.num_of_processes)
-        self.current_observations = torch.zeros(
-            self.num_of_processes, *self.parallel_environments.get_state_shape()
-        )
+        self.current_observations = torch.zeros(self.num_of_processes, 
+                                                *self.parallel_environments.get_state_shape())
+
         self.writer = SummaryWriter(log_dir=self.config.save_dir)
         self.episode_rewards = [[] for _ in range(self.num_of_processes)]
 
     def run(self):
         num_of_updates = self.config.num_of_steps // self.config.steps_per_update
         self.current_observations = self.parallel_environments.reset()
+        print(self.current_observations.size())
+
         with tqdm(total=int(num_of_updates), desc="Training Progress") as pbar:
             for update in range(int(num_of_updates)):
                 self.storage.reset_storage()
@@ -118,8 +120,8 @@ class A2CDPTrainer:
                 self.writer.add_scalar('Grad/Total Norm', total_norm, update)
 
                 # Save model periodically
-                if update % self.config.save_frequency == 0 and update > 0:
-                    save_path = os.path.join(self.config.save_dir, f'{self.model_name}_{update}.pt')
+                if (update+1) % self.config.save_frequency == 0 and update > 1:
+                    save_path = os.path.join(self.config.save_dir, f'{self.model_name}_{update+1}.pt')
                     torch.save(self.model.state_dict(), save_path)
 
         self.writer.close()

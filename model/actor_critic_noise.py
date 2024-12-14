@@ -153,8 +153,8 @@ class A2CNoiseTrainer:
                 self.writer.add_scalar('Grad/Total Norm', total_norm, update)
 
                 # Save model periodically
-                if update % self.config.save_frequency == 0 and update > 0:
-                    save_path = os.path.join(self.config.save_dir, f'{self.model_name}_{update}.pt')
+                if (update+1) % self.config.save_frequency == 0 and update > 1:
+                    save_path = os.path.join(self.config.save_dir, f'{self.model_name}_{update+1}.pt')
                     torch.save(self.model.state_dict(), save_path)
 
         self.writer.close()

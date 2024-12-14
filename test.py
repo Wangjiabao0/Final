@@ -1,8 +1,10 @@
 import pdb
 import yaml
+import os
 
 from munch import Munch, DefaultMunch
 import gymnasium as gym
+from gymnasium.wrappers.record_video import RecordVideo
 import torch
 import argparse
 import yaml
@@ -48,7 +50,17 @@ if __name__ == '__main__':
     init_seeds(config.random_seed)
     config.device = select_device(config.device)
 
-    env = gym.make('CarRacing-v2',render_mode='human')
+    if config.save_video:
+        env = gym.make('CarRacing-v2',render_mode='rgb_array')
+
+        video_save_folder = os.path.join(os.path.dirname(config.pt_path),'video')
+        video_name = os.path.basename(config.pt_path)[:-3]
+        env = RecordVideo(env, video_folder=video_save_folder, 
+                          episode_trigger=lambda x: True, name_prefix=video_name)
+        
+    else:
+        env = gym.make('CarRacing-v2',render_mode='human')
+
     env_wrapper = environment_wrapper.EnvironmentWrapper(env, config.stack_size)
 
     model = get_model(config)
@@ -56,7 +68,7 @@ if __name__ == '__main__':
     model.load_state_dict(pt)
     model.eval()
     
-    state = env_wrapper.reset()
+    state = env_wrapper.reset(seed=config.random_seed)
     state = torch.Tensor([state])
     done = False
     total_score = 0
@@ -67,3 +79,4 @@ if __name__ == '__main__':
         state = torch.Tensor([state])
         total_score += reward
         env_wrapper.render()
+    print('score is ', total_score)
