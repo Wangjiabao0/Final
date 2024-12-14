@@ -42,7 +42,7 @@ Complex State and Action Spaces: Racing tasks involve continuous control over ac
 \subsection{Novelty}
 Designing an appropriate reward function for a car racing task can be non-trivial. Unlike traditional programming approaches, reinforcement learning shifts the focus from explicitly encoding specific behaviors to designing reward systems that enable agents to autonomously discover optimal policies. This highlights the need for improved exploration strategies to ensure that agents explore different trajectories, learn robust behaviors, and avoid premature convergence to suboptimal solutions.
 
-In this project, we systematically evaluate and compare different exploration strategies, including noise network, dropout the policy layer, ICM and RE3, by leveraging A2C as a baseline. We gain insights into their impact on agent performance and highlight the broader applicability of DRL in advancing autonomous driving systems. Furthermore, we investigate the performance of traditional controllers MPC and PID in car racing and compare with our RL-based results. Further work is conducted on imitation learning.
+In this project, we systematically evaluate and compare different exploration strategies, including noise network \cite{NoisyNet}, dropout the policy layer \cite{DP}, ICM \cite{ICM} and RE3 \cite{RE3}, by leveraging A2C as a baseline. We gain insights into their impact on agent performance and highlight the broader applicability of DRL in advancing autonomous driving systems. Furthermore, we investigate the performance of traditional controllers MPC and PID in car racing and compare with our RL-based results. Further work is conducted on imitation learning.
 
 \section{Preliminary}
 \subsection{A2C}
@@ -77,10 +77,20 @@ where $\mu^w+\sigma^w\odot \epsilon^w$ and $\mu^b+\sigma^b\odot \epsilon^b$ repl
 \begin{figure} [!ht]
 	\centering
 	\includegraphics[width=0.35\linewidth]{figure/NoiseNet.png}
-	\caption{Graphical representation of a noisy linear layer. The parameters $\mu_w$ , $\mu_b$ , $\sigma_w$ and $\sigma_b$ are the learnables of the network whereas $\epsilon_w$ and $\epsilon_b$ are noise variables which can be chosen in factorised or non-factorised fashion. The noisy layer functions similarly to the standard fully connected linear layer. The main difference is that in the noisy layer both the weights vector and the bias is perturbed by some parametric zero-mean noise, that is, the noisy weights and the noisy bias can be expressed as $w = \mu^w+\sigma^w \odot \epsilon^w$ and $b = \mu^b + \sigma^b \odot \epsilon^b$, respectively. The output of the noisy layer is then simply obtained as $y = wx + b$.}
+	\caption{Graphical representation of a noisy linear layer. The parameters $\mu_w$ , $\mu_b$ , $\sigma_w$ and $\sigma_b$ are the learnables of the network whereas $\epsilon_w$ and $\epsilon_b$ are noise variables. The noisy layer functions similarly to the standard fully connected linear layer.}
 	\label{fig:enter-label}
 \end{figure}
 \subsection{Random Encoders for Efficient Exploration}
+Analyzing real-world cases with continuous action and state spaces, we face the challenge that each state-action pair appears only once in the training set. The probability of observing the same state again in the future is nearly "zero." Therefore, it is essential to search for methods that group similar states and actions efficiently. The primary goal of the Random Encoder for Efficient Exploration (RE3) method is to minimize the number of training samples required for the model.
+
+Convolutional networks are capable of identifying both external characteristics and internal features of individual objects. Even when convolutional encoders are initialized with random parameters, they can effectively capture information about the similarity between two states. The authors of the RE3 method propose maximizing the state entropy estimate within a fixed representation space of a randomly initialized encoder during model training. The main idea of RE3 is to estimate entropy using a k-nearest neighbors (k-NN) estimator in the low-dimensional space obtained by the randomly initialized encoder. The authors suggest calculating the distances between states in the representation space $f(\theta)$ of the random encoder, where the $\theta$ parameters are randomly initialized and fixed throughout the training process.
+
+The intrinsic reward is represented as:
+\begin{align*}
+	r^i(s_i) = \log\left(\left\Vert y_i-y_i^{k-NN}\right\Vert_2+1\right),
+\end{align*}
+where $y_i$ is the state representation in then random encoder space.
+
 
 \subsection{Intrinsic Curiosity Method}
 Making predictions directly in the raw sensory space is suboptimal, as it is not only computationally challenging to predict pixel values accurately, but also unclear whether pixel prediction aligns with the objectives of the underlying task. Instead, this method focuses on computing curiosity within a latent space, where features are more abstract and meaningful. To achieve this, the approach introduces three neural network components: a state encoder, a forward model, and an inverse model. These components collectively enable the agent to process and interpret latent representations, facilitating more effective learning and exploration.
@@ -117,7 +127,7 @@ Here is the back propagation of the ICM. The prediction error of the forward mod
 
 
 \subsection{Dropout for exploration}
-This method aims to enhance the exploration capability of reinforcement learning (RL) agents by incorporating dropout into the neural network architecture. Experiments were carried out in the MuJoCo simulation environment, including the HalfCheetah task, with Deep Deterministic Policy Gradient (DDPG) and Trust Region Policy Optimization (TRPO) selected as the RL models for evaluation.
+This method aims to enhance the exploration ability of reinforcement learning (RL) agents by introducing dropout into the neural network architecture. For the actor-critic structure algorithm, dropout is mainly added to the fully connected layer of the action to achieve exploration of the action space.
 
 
 \section{Implementation details}
@@ -133,11 +143,8 @@ The agent will receive reward -1 every frame and +1000/Nfor every track tile vi
 \section{Experiment}
 
 \section{Conclusion}
-
+TODO
 \section{Others}
-\subsection{MPC and PID}
-\subsection{Survey of Imitation Learning}
-
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,reference}

@@ -21,9 +21,27 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
-\bibitem{c1}
-A.~Bewley, Z.~Ge, L.~Ott, F.~Ramos, and B.~Upcroft, ``Simple online and
-  realtime tracking,'' in \emph{2016 IEEE international conference on image
-  processing (ICIP)}, 2016.
+\bibitem{NoisyNet}
+M.~Fortunato, M.~G. Azar, B.~Piot, J.~Menick, M.~Hessel, I.~Osband, A.~Graves,
+  V.~Mnih, and R.~Munos, ``Demis hassabis, et al. 2018. noisy networks for
+  exploration,'' in \emph{International Conference on Learning
+  Representations}.
+
+\bibitem{DP}
+T.~T. Sung, D.~Kim, S.~J. Park, and C.-B. Sohn, ``Dropout acts as auxiliary
+  exploration,'' \emph{International Journal of Applied Engineering Research},
+  vol.~13, no.~10, pp. 7977--7982, 2018.
+
+\bibitem{ICM}
+D.~Pathak, P.~Agrawal, A.~A. Efros, and T.~Darrell, ``Curiosity-driven
+  exploration by self-supervised prediction,'' in \emph{International
+  conference on machine learning}.\hskip 1em plus 0.5em minus 0.4em\relax PMLR,
+  2017, pp. 2778--2787.
+
+\bibitem{RE3}
+Y.~Seo, L.~Chen, J.~Shin, H.~Lee, P.~Abbeel, and K.~Lee, ``State entropy
+  maximization with random encoders for efficient exploration,'' in
+  \emph{International Conference on Machine Learning}.\hskip 1em plus 0.5em
+  minus 0.4em\relax PMLR, 2021, pp. 9443--9454.
 
 \end{thebibliography}

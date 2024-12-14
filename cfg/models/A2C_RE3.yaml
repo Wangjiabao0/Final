@@ -2,8 +2,8 @@ reward_discount: 0.99
 value_loss_coef: 0.5
 entropy_coef: 0.1
 
-k_neighbors: 10
-buffer_size: 500
+k_neighbors: 3
+buffer_size: 1000
 latent_dim: 128
 
 # discount about intrinsic reward
